@@ -3,35 +3,187 @@
 <head>
   <title>test</title>
   <style type="text/css">
-            body, html
-            {
-                margin: 0; padding: 0; height: 100%; overflow: hidden;
-            }
+  body, html
+  {
+    margin: 0; padding: 0; height: 100%; overflow: hidden;
+  }
 
-            .content
-            {
-                position:absolute; left: 0; right: 0; bottom: 0; top: 0px;
-            }
-            .hide
-            {
-                display: none;
-            }
-            .show
-            {
-                position:absolute; left: 0; right: 0; bottom: 0; top: 70%;
-            }
+  .content
+  {
+    position:absolute; left: 0; right: 0; bottom: 0; top: 0px;
+  }
+  .hide
+  {
+    display: none;
+  }
+  .show
+  {
+    position:absolute; left: 0; right: 0; bottom: 0; top: 70%;
+  }
 
-        </style>
+  </style>
 </head>
 
 <body>
   <div class = "content">
-  <iframe id="iirose" src="https://iirose.com" style="width:100%;height:100%;frameborder:0;"></iframe>
+    <iframe id="iirose" src="https://iirose.com" style="width:100%;height:100%;frameborder:0;">
+      <script>
+      iiroseSide();
+
+      function iiroseSide(){
+
+        var timer = setInterval(function () {
+
+          var frameDocument = document.getElementById("mainFrame").contentDocument;
+          if(frameDocument.getElementById("moveinput")!=null){
+            console.log(document.getElementById("moveinput"));
+            console.log(frameDocument.getElementById("moveinput"));
+            clearInterval(timer);
+            // var bc = new BroadcastChannel('pickingSongs');
+
+            //  bc.onmessage = function (ev) { pickingSong(ev); } ;/* receive */
+            window.addEventListener("message", function(event) {
+              console.log("Received message: " + event.data);
+
+              if (event.origin === "https://www.xiami.com"){
+                console.log("Received message: " + event.data);
+                pickingSong(event.data);
+              }
+            }, true);
+          }
+
+        }, 1000);
+
+
+        return;
+      }
+
+
+      function pickingSong(str){
+        var frameDocument = document.getElementById("mainFrame").contentDocument;
+
+
+        //origin = frameDocument.getElementsByClassName("mainColor");
+        console.log(frameDocument);
+
+        //console.log(frameDocument.getElementsByClassName("moveinputSendBtn"));
+        //console.log(frameDocument.getElementById("moveinput"));
+
+        var inputBox = frameDocument.getElementById("moveinput");
+        var submit = frameDocument.getElementsByClassName("moveinputSendBtn")[0];
+        console.log(str);
+        inputBox.value = "@"+str;
+        submit.click();
+        var timer2 = setInterval(function () {
+          var frameDocument = document.getElementById("mainFrame").contentDocument;
+          if((frameDocument.getElementsByClassName("demandHolderPlayBtn")[0]!=null)||(frameDocument.getElementsByClassName("emptyShow")[0]!=null)){
+
+            var songlist = frameDocument.getElementsByClassName("demandHolderPlayBtn");
+            console.log(songlist[0]);
+            clearInterval(timer2);
+            var flag = 0;
+            for (var i = 0; i < songlist.length; i++) {
+              // Iterate over numeric indexes from 0 to 5, as everyone expects.
+              var node = null;
+              for (var j = 0; j < songlist[i].childNodes.length; j++) {
+                if (songlist[i].childNodes[j].className == "mainColor") {
+                  node = songlist[i].childNodes[j];
+                  break;
+                }
+              }
+              if (node.hasAttribute("onclick")){
+                node.click();
+                console.log("pick "+i);
+                flag=1;
+                break;
+              }
+              console.log("cannot pick "+i);
+            }
+            console.log("0");
+            if (flag==0){
+              //click return
+              console.log("failed");
+
+              frameDocument.getElementsByClassName("footerItemBgShape_pointer")[0].onclick.apply();
+            }
+
+
+          }
+          //
+        }, 500);
+
+        //var newSize = songlist.length;//for future use
+
+
+
+        // good to go! Put your code here.
+      }
+      </script>
+    </iframe>
   </div>
-  <div id="xiami" class = "show">
+  <div id="xiamidiv" class = "show">
     <bottom id="toggle" onclick="document.getElementById('xiami').className='hide'">Click here to hide xiami</bottom>
-    <iframe src="https://www.xiami.com/radio/play/id/2" style="width:100%;height:100%;border:0; border:none;"></iframe>
+    <iframe id="xiami" src="https://www.xiami.com/radio/play/id/2" style="width:100%;height:100%;border:0; border:none;">
+
+    </iframe>
   </div>
+  <script>
+  //get song name & artisan name
+  //var frameDocument = document.getElementById("mainFrame").contentDocument;
+  // console.log(frameDocument);
+  //    while(frameDocument.ready !== 'complete') {
+  //        setInterval(function () {alert("waiting for loading");}, 100);
+  //    }
+
+
+  var timerRoot = setInterval(function () {
+    var iiroseDoc = document.getElementById("iirose").contentDocument;
+    var xiamiDoc = document.getElementById("xiami").contentDocument;
+    if ((iiroseDoc.getElementById("mainFrame"!=null)&&(xiamiDoc.getElementById("textareaShadow")!=null))){
+      clearInterval(timerRoot);
+      xiamiSide();
+
+    }
+  }, 300)
+
+  xiamiSide(){
+    setTimeout(function(){
+      var mutationObserver = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+          console.log(mutation);
+          pickNewSong();
+        });
+      });
+      mutationObserver.observe(xiamiDoc.getElementById("artist_info fl")[0], {
+        attributes: true,
+        characterData: true,
+        childList: true,
+        subtree: true,
+        attributeOldValue: true,
+        characterDataOldValue: true
+      });
+
+
+
+
+
+      post(str);
+    }, 5000)
+  }
+  pickNewSong(){
+    getSongInfo();
+    post(str);
+  }
+
+  getSongInfo(){
+
+  }
+
+  post(str){
+
+  }
+
+  </script>
 
 </body>
 </html>
