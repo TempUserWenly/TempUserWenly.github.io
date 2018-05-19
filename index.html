@@ -2,13 +2,35 @@
 <html>
 <head>
   <title>test</title>
+  <style type="text/css">
+            body, html
+            {
+                margin: 0; padding: 0; height: 100%; overflow: hidden;
+            }
+
+            .content
+            {
+                position:absolute; left: 0; right: 0; bottom: 0; top: 0px;
+            }
+            .hide
+            {
+                display: none;
+            }
+            .show
+            {
+                position:absolute; left: 0; right: 0; bottom: 0; top: 70%;
+            }
+
+        </style>
 </head>
 
 <body>
-  <iframe src="https://iirose.com" style="width:100%;height:100%;border:0; border:none;"></iframe>
-
-  <iframe src="https://www.xiami.com/radio/play/id/2" style="width:100%;height:20%;border:0; border:none;"></iframe>
-
+  <div class = "content">
+  <iframe id="iirose" src="https://iirose.com" style="width:100%;height:100%;frameborder:0;"></iframe>
+  </div>
+  <div class = "show">
+  <iframe src="https://www.xiami.com/radio/play/id/2" style="width:100%;height:100%;border:0; border:none;"></iframe>
+  </div>
 
 </body>
 </html>
