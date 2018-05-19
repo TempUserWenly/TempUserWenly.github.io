@@ -141,6 +141,7 @@
     var xiamiDoc = document.getElementById("xiami").contentDocument;
     if ((iiroseDoc.getElementById("mainFrame"!=null)&&(xiamiDoc.getElementById("textareaShadow")!=null))){
       clearInterval(timerRoot);
+      console.log("loaded!");
       xiamiSide();
 
     }
@@ -148,6 +149,7 @@
 
   xiamiSide(){
     setTimeout(function(){
+      console.log("playing with xiami");
       var mutationObserver = new MutationObserver(function(mutations) {
         mutations.forEach(function(mutation) {
           console.log(mutation);
