@@ -122,7 +122,7 @@
     </iframe>
   </div>
   <div id="xiamidiv" class = "show">
-    <bottom id="toggle" onclick="document.getElementById('xiami').className='hide'">Click here to hide xiami</bottom>
+    <bottom id="toggle" onclick="pickingScript()">Click here</bottom>
     <iframe id="xiami" src="https://www.xiami.com/radio/play/id/2" style="width:100%;height:100%;border:0; border:none;">
 
     </iframe>
@@ -134,57 +134,58 @@
   //    while(frameDocument.ready !== 'complete') {
   //        setInterval(function () {alert("waiting for loading");}, 100);
   //    }
+  function pickingScript(){
+    console.log("start!");
+    document.getElementById('xiami').className='hide'
+    var timerRoot = setInterval(function () {
+      var iiroseDoc = document.getElementById("iirose").contentDocument;
+      var xiamiDoc = document.getElementById("xiami").contentDocument;
+      if ((iiroseDoc.getElementById("mainFrame"!=null)&&(xiamiDoc.getElementById("textareaShadow")!=null))){
+        clearInterval(timerRoot);
+        console.log("loaded!");
+        xiamiSide();
 
-  console.log("start!");
-  var timerRoot = setInterval(function () {
-    var iiroseDoc = document.getElementById("iirose").contentDocument;
-    var xiamiDoc = document.getElementById("xiami").contentDocument;
-    if ((iiroseDoc.getElementById("mainFrame"!=null)&&(xiamiDoc.getElementById("textareaShadow")!=null))){
-      clearInterval(timerRoot);
-      console.log("loaded!");
-      xiamiSide();
+      }
+    }, 300)
+
+    xiamiSide(){
+      setTimeout(function(){
+        console.log("playing with xiami");
+        var mutationObserver = new MutationObserver(function(mutations) {
+          mutations.forEach(function(mutation) {
+            console.log(mutation);
+            pickNewSong();
+          });
+        });
+        mutationObserver.observe(xiamiDoc.getElementById("artist_info fl")[0], {
+          attributes: true,
+          characterData: true,
+          childList: true,
+          subtree: true,
+          attributeOldValue: true,
+          characterDataOldValue: true
+        });
+
+
+
+
+
+        post(str);
+      }, 5000)
+    }
+    pickNewSong(){
+      getSongInfo();
+      post(str);
+    }
+
+    getSongInfo(){
 
     }
-  }, 300)
 
-  xiamiSide(){
-    setTimeout(function(){
-      console.log("playing with xiami");
-      var mutationObserver = new MutationObserver(function(mutations) {
-        mutations.forEach(function(mutation) {
-          console.log(mutation);
-          pickNewSong();
-        });
-      });
-      mutationObserver.observe(xiamiDoc.getElementById("artist_info fl")[0], {
-        attributes: true,
-        characterData: true,
-        childList: true,
-        subtree: true,
-        attributeOldValue: true,
-        characterDataOldValue: true
-      });
+    post(str){
 
-
-
-
-
-      post(str);
-    }, 5000)
+    }
   }
-  pickNewSong(){
-    getSongInfo();
-    post(str);
-  }
-
-  getSongInfo(){
-
-  }
-
-  post(str){
-
-  }
-
   </script>
 
 </body>
